@@ -199,7 +199,7 @@
             <td>${element[0]}</td>
             <td>${element[1]}</td>
             
-            <td><button class="btn btn-danger">Delete</button></td>    
+            <td><button class="btn btn-danger" onclick = "deleted(4)">Delete</button></td>   
         </tr> `;
         });
         tableBody.innerHTML = str;
@@ -207,6 +207,22 @@
 
       add = document.getElementById("add");
       add.addEventListener("click", update);
+
+
+
+
+      function deleted(itemIndex){
+          console.log("Delete",itemIndex);
+          itemJsonArrayStr = localStorage.getItem("itemsJson");
+          itemJsonArray = JSON.parse(itemJsonArrayStr);
+
+          //Delete itemIndex element from the array
+          itemJsonArray.splice(itemIndex,1); //splice is a method
+          localStorage.setItem("itemsJson", JSON.stringify(itemJsonArray)); //save 
+          update();//update
+
+
+      }
     </script>
   </body>
 </html>
