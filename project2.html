@@ -20,7 +20,8 @@
   </head>
 
   <body>
-    <!-- Navigation Bar -->
+
+    <!-- Navigation Bar (copied)-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="#">TODOs List</a>
       <button
@@ -88,6 +89,9 @@
       </div>
     </nav>
 
+
+
+    
     <!-- edited-->
     <div class="container my-4">
       <h2 class="text-center">TODOs List</h2>
@@ -115,10 +119,10 @@
         <textarea class="form-control" id="description" rows="3"></textarea>
       </div>
 
-      <!-- ADDING a Button -->
-      <button type="submit" id="add" class="btn btn-primary">
-        Add to list
-      </button>
+    <!-- ADDING a Button -->
+      <button type="submit" id="add" class="btn btn-success"> Add to list</button>  
+      <button type="submit" id="clear" class="btn btn-warning" onclick="clearStorage()">Clear list</button>
+
       <!--From-->
 
       <!-- edited (div created)-->
@@ -142,7 +146,7 @@
               <th scope="row">1</th>
               <td>Get some cofee</td>
               <td>Your now coding</td>
-              <td><button class="btn btn-primary">Delete</button></td>
+              <td><button class="btn btn-danger">Delete</button></td>
               <!--Making a Delete button-->
             </tr>
           </tbody>
@@ -172,21 +176,35 @@
 
     <!-- MY JAVASCRIPT CODES-->
     <script>
-      function update() {
+      function getAndUpdate() {
         //local storage e item add hoar jonno.
         console.log("updating list");
-        tit = document.getElementById("title").value; //value (title)
-        desc = document.getElementById("description").value; //value (description)
-        if (localStorage.getItem("itemsJson") == null) {
+        tit = document.getElementById('title').value; //value (title)
+        desc = document.getElementById('description').value; //value (description)
+        if (localStorage.getItem('itemsJson') == null) {
           // item na thakle
           itemJsonArray = [];
           itemJsonArray.push([tit, desc]);
-          localStorage.setItem("itemsJson", JSON.stringify(itemJsonArray));
+          localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray));
         } else {
-          itemJsonArrayStr = localStorage.getItem("itemsJson");
+          itemJsonArrayStr = localStorage.getItem('itemsJson');
           itemJsonArray = JSON.parse(itemJsonArrayStr);
           itemJsonArray.push([tit, desc]);
-          localStorage.setItem("itemsJson", JSON.stringify(itemJsonArray));
+          localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray));
+        }
+        update();
+      }
+
+      function update() {
+        //local storage e item add hoar jonno.
+        if (localStorage.getItem('itemsJson') == null) {
+          // item na thakle
+          itemJsonArray = [];
+          localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray));
+        } 
+        else {
+          itemJsonArrayStr = localStorage.getItem('itemsJson');
+          itemJsonArray = JSON.parse(itemJsonArrayStr);
         }
         //populate the table (Display the items)
         let tableBody = document.getElementById("tableBody");
@@ -199,29 +217,38 @@
             <td>${element[0]}</td>
             <td>${element[1]}</td>
             
-            <td><button class="btn btn-danger" onclick = "deleted(4)">Delete</button></td>   
+            <td><button class="btn btn-danger" onclick = "deleted(${index})">Delete</button></td>   
         </tr> `;
         });
         tableBody.innerHTML = str;
       }
 
       add = document.getElementById("add");
-      add.addEventListener("click", update);
+      add.addEventListener("click", getAndUpdate);
+      update();
 
 
 
 
-      function deleted(itemIndex){
-          console.log("Delete",itemIndex);
-          itemJsonArrayStr = localStorage.getItem("itemsJson");
-          itemJsonArray = JSON.parse(itemJsonArrayStr);
+      function deleted(itemIndex) {
+        console.log("Delete", itemIndex);
+        itemJsonArrayStr = localStorage.getItem('itemsJson');
+        itemJsonArray = JSON.parse(itemJsonArrayStr);
 
-          //Delete itemIndex element from the array
-          itemJsonArray.splice(itemIndex,1); //splice is a method
-          localStorage.setItem("itemsJson", JSON.stringify(itemJsonArray)); //save 
-          update();//update
+        //Delete itemIndex element from the array
+        itemJsonArray.splice(itemIndex, 1); //splice is a method
+        localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray)); //save
+        update(); //update
+      }
 
-
+      function clearStorage()
+      {
+          if(confirm("Do you really want to clear?")){
+             console.log('Clearing the stroage');
+             localStorage.clear();
+             update();
+          }
+          
       }
     </script>
   </body>
